@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import goatShape from '../../helpers/propz/goatShape';
+import GoatForm from '../GoatForm';
 
 export default class Goat extends Component {
+  static propTypes = {
+    goat: goatShape,
+    removeGoat: PropTypes.func,
+  }
+
   state = {
     isBusy: this.props.goat.isBusy,
+    edit: false,
   }
 
   updateGoat = () => {
@@ -11,9 +20,15 @@ export default class Goat extends Component {
     });
   }
 
+  editGoat = () => {
+    this.setState({
+      edit: !this.state.edit,
+    });
+  }
+
   render() {
-    const { goat } = this.props;
-    const { isBusy } = this.state;
+    const { goat, removeGoat, addUpdateGoat } = this.props;
+    const { isBusy, edit } = this.state;
 
     return (
       <div className='Goat col-md-3 mb-3' id={goat.id}>
@@ -31,6 +46,12 @@ export default class Goat extends Component {
               <button className='btn btn-danger' onClick={this.updateGoat}>Goat in Use</button>
             )
             }
+            <button className='btn btn-danger' id={goat.id} onClick={(e) => removeGoat(e)}>Remove Goat</button>
+            <button className='btn btn-info my-2' onClick={this.editGoat}>
+             {edit ? 'Close Form' : 'Open form'}
+
+            </button>
+            { edit && (<GoatForm goat={goat} addUpdateGoat={addUpdateGoat} />)}
           </div>
         </div>
       </div>
